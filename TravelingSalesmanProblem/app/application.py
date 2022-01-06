@@ -10,11 +10,6 @@ from .plots import display_fitness_plots
 def run(initial_population: List[float], mutation_probability: float, max_generations: int):
     print('Starting the optimization...')
 
-    chrlen = 5
-    chrprec = 1
-    chroffset = 14.0
-    setup_chromosomes(chrlen, chrprec, chroffset)
-
     ga = GeneticAlgorithm()
     ga.setup(fitness_function, initial_population, crossover_probability, mutation_probability, max_generations)
     [max_x, max_value, max_fitness, min_fitness, avg_fitness] = ga.find_max()
