@@ -3,10 +3,6 @@ import string
 CITIES_AMOUNT = 10 # MAX: 26
 CITIES_SYMBOLS = string.ascii_uppercase
 
-def get_chromosome_length() -> int:
-    global CITIES_AMOUNT
-    return CITIES_AMOUNT
-
 class Chromosome:
     def __init__(self, value: str = CITIES_SYMBOLS[:CITIES_AMOUNT]):
         self.alleles = value
@@ -21,3 +17,7 @@ class Chromosome:
     def __getitem__(self, key):
         return self.alleles[key]
     
+    @classmethod
+    def get_chromosome_length() -> int:
+        global CITIES_AMOUNT
+        return CITIES_AMOUNT

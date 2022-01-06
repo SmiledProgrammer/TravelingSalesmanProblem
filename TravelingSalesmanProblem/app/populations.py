@@ -30,7 +30,7 @@ class Population:
 
 def create_population(values: List[float], fitness_func: Callable) -> Population:
     if len(values) > MAX_POPULATION_SIZE:
-        raise ValueError('Population size is too big.')
+        raise ValueError('Population size is too big (max: 100).')
     population = Population()
     for x in values:
         ind = Individual.from_value(x, fitness_func)
