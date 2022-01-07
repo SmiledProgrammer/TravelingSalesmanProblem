@@ -1,17 +1,18 @@
-from typing import List
-from typing import Callable
+from typing import List, Callable
+from random import randrange
 
+from .chromosomes import Chromosome
 from .individuals import Individual
 
 MAX_POPULATION_SIZE = 100
 
 class Population:
-    def __init__(self, values: List[str], fitness_func: Callable):
+    def __init__(self, routes: List[List[int]], fitness_func: Callable, cities_distances: List[List[float]]):
         if len(values) > MAX_POPULATION_SIZE:
             raise ValueError('Population size is too big (max: {}).'.format(MAX_POPULATION_SIZE))
         self.individuals = []
-        for val in values:
-            ind = Individual(val, fitness_func)
+        for r in routes:
+            ind = Individual(r, fitness_func, cities_distances)
             self.individuals.append(ind)
 
     def __repr__(self):
@@ -32,3 +33,16 @@ class Population:
 
     def append(self, value):
         self.individuals.append(value)
+
+    @classmethod
+    def random(cls, popsize: int, fitness_func: Callable, cities_distances: List[List[float]]) -> 'Population':
+        chrlen = Chromosome.get_chromosome_length()
+        values = []
+        for _ in range(popsize):
+            cities = list(range(chrlen))
+            genes = []
+            for i in range(chrlen):
+                r = randrange(len(cities))
+                genes.append(cities.pop(r))
+            values.append(genes)
+        return cls(values, fitness_func, cities_distances)

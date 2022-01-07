@@ -1,6 +1,7 @@
 import string
+from typing import List
 
-CITIES_AMOUNT = 10
+CITIES_AMOUNT = 5
 CITIES_SYMBOLS = string.ascii_uppercase
 
 def setup_chromosomes(citiesamount: int):
@@ -11,23 +12,19 @@ def setup_chromosomes(citiesamount: int):
         CITIES_AMOUNT = citiesamount
 
 class Chromosome:
-    def __init__(self, value: str = CITIES_SYMBOLS[:CITIES_AMOUNT]):
-        self.genes = value
+    def __init__(self, genes: List[int] = range(CITIES_AMOUNT)):
+        self.genes = genes
 
     def __repr__(self):
-        return self.genes
+        return str(self.genes)
 
     def __setitem__(self, key, value):
-        gstr = self.genes
-        self.genes = gstr[:key] + value + gstr[key + 1:]
+        self.genes[key] = value
 
     def __getitem__(self, key):
         return self.genes[key]
 
-    def set_genes(self, value: str):
-        self.genes = value
-    
-    @classmethod
+    @staticmethod
     def get_chromosome_length() -> int:
         global CITIES_AMOUNT
         return CITIES_AMOUNT
