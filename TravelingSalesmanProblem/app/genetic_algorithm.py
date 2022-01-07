@@ -1,22 +1,17 @@
 from random import random
 from random import randrange
-from typing import Callable
 from typing import List
 from statistics import median
 
-from .chromosomes import get_chromosome_length
-from .chromosomes import Allele
 from .chromosomes import Chromosome
 from .individuals import Individual
 from .populations import Population
-from .populations import create_population
 
 def flip(probability: float) -> float:
     return random() < probability
 
 class GeneticAlgorithm:
-    def setup(self, fitness_func: Callable, init_pop: List[float], crossover_prob: float, mutation_prob: float, max_generations: int):
-        self.fitness_function = fitness_func
+    def setup(self, init_pop: List[float], crossover_prob: float, mutation_prob: float, max_generations: int):
         self.population = create_population(init_pop, fitness_func)
         self.population_size = len(self.population)
         self.crossover_probability = crossover_prob
@@ -26,6 +21,9 @@ class GeneticAlgorithm:
         self.max_fitness = []
         self.min_fitness = []
         self.avg_fitness = []
+
+    def fitness_function(self, value: str):
+        pass # TODO
         
     def selection_sum(self):
         fitsum = 0.0

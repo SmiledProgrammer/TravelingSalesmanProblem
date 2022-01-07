@@ -3,8 +3,12 @@ import string
 CITIES_AMOUNT = 10
 CITIES_SYMBOLS = string.ascii_uppercase
 
-if CITIES_AMOUNT > len(CITIES_SYMBOLS):
-    raise ValueError('Cities amount (chromosome length) is too big (max: {}).'.format(len(CITIES_SYMBOLS)))
+def setup_chromosomes(citiesamount: int):
+    if citiesamount > len(CITIES_SYMBOLS):
+        raise ValueError('Cities amount (chromosome length) is too big (max: {}).'.format(len(CITIES_SYMBOLS)))
+    else:
+        global CITIES_AMOUNT
+        CITIES_AMOUNT = citiesamount
 
 class Chromosome:
     def __init__(self, value: str = CITIES_SYMBOLS[:CITIES_AMOUNT]):

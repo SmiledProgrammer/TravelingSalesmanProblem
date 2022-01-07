@@ -27,6 +27,9 @@
     <Compile Include="app\individuals.py" />
     <Compile Include="app\plots.py" />
     <Compile Include="app\populations.py" />
+    <Compile Include="app\utils.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\__init__.py" />
     <Compile Include="config.py" />
     <Compile Include="TravelingSalesmanProblem.py" />

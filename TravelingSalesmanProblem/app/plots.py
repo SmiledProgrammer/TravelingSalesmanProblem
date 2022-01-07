@@ -3,6 +3,7 @@ import numpy as np
 from typing import List
 from typing import Callable
 
+# TODO: remove
 def display_function_plot(func: Callable, figname: str, foundpointx: float, foundpointy: float, startval: float, endval: float, dividepoints: int = 100):
     funcx = np.linspace(startval, endval, dividepoints)
     funcy = func(funcx)
