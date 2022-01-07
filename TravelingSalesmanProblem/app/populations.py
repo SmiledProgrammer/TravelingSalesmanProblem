@@ -7,12 +7,12 @@ from .individuals import Individual
 MAX_POPULATION_SIZE = 100
 
 class Population:
-    def __init__(self, routes: List[List[int]], fitness_func: Callable, cities_distances: List[List[float]]):
-        if len(values) > MAX_POPULATION_SIZE:
+    def __init__(self, routes: List[List[int]]):
+        if len(routes) > MAX_POPULATION_SIZE:
             raise ValueError('Population size is too big (max: {}).'.format(MAX_POPULATION_SIZE))
         self.individuals = []
         for r in routes:
-            ind = Individual(r, fitness_func, cities_distances)
+            ind = Individual(r)
             self.individuals.append(ind)
 
     def __repr__(self):
@@ -35,14 +35,15 @@ class Population:
         self.individuals.append(value)
 
     @classmethod
-    def random(cls, popsize: int, fitness_func: Callable, cities_distances: List[List[float]]) -> 'Population':
-        chrlen = Chromosome.get_chromosome_length()
-        values = []
+    def random(cls, popsize: int) -> 'Population':
+        chrlen = Chromosome.get_length()
+        print(chrlen)
+        routes = []
         for _ in range(popsize):
             cities = list(range(chrlen))
-            genes = []
+            route = []
             for i in range(chrlen):
                 r = randrange(len(cities))
-                genes.append(cities.pop(r))
-            values.append(genes)
-        return cls(values, fitness_func, cities_distances)
+                route.append(cities.pop(r))
+            routes.append(route)
+        return cls(routes)

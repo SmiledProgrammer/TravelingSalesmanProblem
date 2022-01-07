@@ -1,5 +1,4 @@
-from random import random
-from random import randrange
+from random import random, randrange
 from typing import List
 from statistics import median
 
@@ -11,20 +10,17 @@ def flip(probability: float) -> float:
     return random() < probability
 
 class GeneticAlgorithm:
-    def setup(self, init_pop: List[float], crossover_prob: float, mutation_prob: float, max_generations: int):
-        self.population = create_population(init_pop, fitness_func)
+    def setup(self, init_pop: Population, crossover_prob: float, mutation_prob: float, iterations: int):
+        self.population = init_pop
         self.population_size = len(self.population)
         self.crossover_probability = crossover_prob
         self.mutation_probability = mutation_prob
-        self.max_generations = max_generations
+        self.iterations = iterations
         self.generations = 0
         self.max_fitness = []
         self.min_fitness = []
         self.avg_fitness = []
 
-    def fitness_function(self, value: str):
-        pass # TODO
-        
     def selection_sum(self):
         fitsum = 0.0
         minfit = float("inf")

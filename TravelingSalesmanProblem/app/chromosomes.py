@@ -1,18 +1,9 @@
-import string
 from typing import List
 
-CITIES_AMOUNT = 5
-CITIES_SYMBOLS = string.ascii_uppercase
-
-def setup_chromosomes(citiesamount: int):
-    if citiesamount > len(CITIES_SYMBOLS):
-        raise ValueError('Cities amount (chromosome length) is too big (max: {}).'.format(len(CITIES_SYMBOLS)))
-    else:
-        global CITIES_AMOUNT
-        CITIES_AMOUNT = citiesamount
+from .cities import get_cities_amount
 
 class Chromosome:
-    def __init__(self, genes: List[int] = range(CITIES_AMOUNT)):
+    def __init__(self, genes: List[int] = range(get_cities_amount())):
         self.genes = genes
 
     def __repr__(self):
@@ -25,6 +16,5 @@ class Chromosome:
         return self.genes[key]
 
     @staticmethod
-    def get_chromosome_length() -> int:
-        global CITIES_AMOUNT
-        return CITIES_AMOUNT
+    def get_length() -> int:
+        return get_cities_amount()

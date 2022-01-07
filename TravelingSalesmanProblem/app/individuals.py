@@ -1,11 +1,12 @@
 from typing import List, Callable
 
 from .chromosomes import Chromosome
+from .fitness import fitness
 
 class Individual:
-    def __init__(self, genes: List[int], fitness_func: Callable, cities_distances: List[List[float]]):
+    def __init__(self, genes: List[int]):
         self.chromosome = Chromosome(genes)
-        self.fitness = fitness_func(genes, cities_distances)
+        self.fitness = fitness(genes)
         
     def __repr__(self):
-        return '({}, {:.2f}, {:.2f})'.format(self.chromosome, self.x, self.fitness)
+        return '({}, {:.2f}, {:.2f})'.format(self.chromosome.genes, self.fitness)
