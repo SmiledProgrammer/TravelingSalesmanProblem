@@ -7,7 +7,7 @@ from .individuals import Individual
 MAX_POPULATION_SIZE = 100
 
 class Population:
-    def __init__(self, routes: List[List[int]]):
+    def __init__(self, routes: List[List[int]] = []):
         if len(routes) > MAX_POPULATION_SIZE:
             raise ValueError('Population size is too big (max: {}).'.format(MAX_POPULATION_SIZE))
         self.individuals = []

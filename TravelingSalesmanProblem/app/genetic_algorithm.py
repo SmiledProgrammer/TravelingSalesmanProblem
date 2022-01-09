@@ -1,6 +1,8 @@
-from random import random, randrange
-from typing import List
+from random import random, randrange, sample
+from typing import List, Tuple
 from statistics import median
+from copy import deepcopy
+from itertools import chain
 
 from .chromosomes import Chromosome
 from .individuals import Individual
@@ -21,64 +23,83 @@ class GeneticAlgorithm:
         self.min_fitness = []
         self.avg_fitness = []
 
-    def selection_sum(self):
+    def selection_sum(self) -> Tuple[float, float]:
         fitsum = 0.0
-        minfit = float("inf")
+        maxfit = -float("inf")
         for ind in self.population:
             fitsum = fitsum + ind.fitness
-            if ind.fitness < minfit:
-                minfit = ind.fitness
-        cutsum = fitsum - minfit * self.population_size
-        return [cutsum, minfit]
+            if ind.fitness > maxfit:
+                maxfit = ind.fitness
+        cutsum = maxfit * self.population_size - fitsum
+        return (cutsum, maxfit)
 
     def select(self):
         newpop = Population()
-        [sum, minfit] = self.selection_sum()
+        [sum, maxfit] = self.selection_sum()
         for _ in self.population:
             rnd = sum * random()
             partsum = 0.0
             j = -1
             while True:
                 j = j + 1
-                partsum = partsum + self.population[j].fitness - minfit
+                partsum = partsum + maxfit - self.population[j].fitness
                 if partsum >= rnd or j + 1 == self.population_size:
                     break
             newpop.append(self.population[j])
         self.population = newpop
 
-    def mutate(self, allele: Allele) -> Allele:
+    def mutate(self, chromosome: Chromosome):
         if flip(self.mutation_probability):
-            return not allele
-        else:
-            return allele
+            m1, m2 = sample(range(Chromosome.get_length()), 2)
+            mutval = chromosome[m1]
+            chromosome[m1] = chromosome[m2]
+            chromosome[m2] = mutval
 
     def crossover(self):
         newpop = Population()
         i = 0
         while i + 1 < self.population_size:
+            ind1 = self.population[i]
+            ind2 = self.population[i + 1]
             if flip(self.crossover_probability):
-                crosspoint = randrange(0, get_chromosome_length())
+                child1, child2 = self.single_pmx_crossover(ind1.chromosome, ind2.chromosome)
+                self.mutate(child1)
+                self.mutate(child2)
+                newind1 = Individual(child1.genes)
+                newind2 = Individual(child2.genes)
+                newpop.append(newind1)
+                newpop.append(newind2)
             else:
-                crosspoint = get_chromosome_length()
-            parent1 = self.population[i].chromosome
-            parent2 = self.population[i + 1].chromosome
-            child1 = Chromosome()
-            child2 = Chromosome()
-            for j in range(0, crosspoint):
-                child1[j] = self.mutate(parent1[j])
-                child2[j] = self.mutate(parent2[j])
-            for j in range(crosspoint, get_chromosome_length()):
-                    child1[j] = self.mutate(parent2[j])
-                    child2[j] = self.mutate(parent1[j])
-            individual1 = Individual.from_chromosome(child1, self.fitness_function)
-            individual2 = Individual.from_chromosome(child2, self.fitness_function)
-            newpop.append(individual1)
-            newpop.append(individual2)
+                newpop.append(ind1)
+                newpop.append(ind2)
             i = i + 2
         self.population = newpop
 
-    def save_statistics(self) -> float:
-        max_x = -float("inf")
+    def single_pmx_crossover(self, parent1: Chromosome, parent2: Chromosome) -> Tuple[Chromosome, Chromosome]:
+        chrlen = Chromosome.get_length()
+        leftx = randrange(0, chrlen)
+        rightx = randrange(leftcross + 1, chrlen + 1)
+        child1 = Chromosome(deepcopy(parent1.genes))
+        child2 = Chromosome(deepcopy(parent2.genes))
+        chars1 = {}
+        chars2 = {}
+        for j in range(leftx, rightx):
+            c1 = parent1[j]
+            c2 = parent2[j]
+            chars1[c2] = c1
+            chars2[c1] = c2
+            child1[j] = parent2[j]
+            child2[j] = parent1[j]
+        for i in chain(range(leftx), range(rightx, chrlen)):
+            while child1[i] in chars1:
+                child1[i] = chars1[child1[i]]
+            while child2[i] in chars2:
+                child2[i] = chars2[child2[i]]
+        return (child1, child2)
+
+    def save_statistics(self):
+        maxr = -float("inf")
+        minr = -float("inf")
         maxfit = -float("inf")
         minfit = float("inf")
         sum = 0.0
@@ -86,21 +107,23 @@ class GeneticAlgorithm:
             sum = sum + ind.fitness
             if ind.fitness < minfit:
                 minfit = ind.fitness
+                minr = ind.chromosome.genes
             if ind.fitness > maxfit:
                 maxfit = ind.fitness
-                max_x = ind.x
+                max_x = ind.chromosome.genes
         avgfit = sum / self.population_size
         self.max_fitness.append(maxfit)
         self.min_fitness.append(minfit)
         self.avg_fitness.append(avgfit)
-        return max_x
+        return [maxr, minr]
     
-    def find_max(self):
-        best_x = self.save_statistics()
+    def find_route(self):
+        [shortest, longest] = self.save_statistics()
         best_fitness = self.max_fitness[0]
-        while self.generations < self.max_generations:
+        worst_fitness = self.min_fitness[0]
+        while self.generations < self.iterations:
             self.select()
-            self.crossover()
+            self.crossover() # ENDED HERE
             self.generations = self.generations + 1
             if self.generations % 10 == 0:
                 print('Generation #{}...'.format(self.generations))

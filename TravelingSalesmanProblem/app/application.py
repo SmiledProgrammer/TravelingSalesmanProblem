@@ -18,7 +18,7 @@ def run(population_size: int, mutation_probability: float, iterations: int, citi
 
     ga = GeneticAlgorithm()
     ga.setup(initpop, crossprob, mutation_probability, iterations)
-    [max_x, max_value, max_fitness, min_fitness, avg_fitness] = ga.find_max()
+    [max_x, max_value, max_fitness, min_fitness, avg_fitness] = ga.find_route()
     print('Best: route = {}, length = {}'.format(max_x, max_value))
 
     #display_map() # shortest

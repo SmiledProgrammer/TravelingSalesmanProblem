@@ -16,7 +16,7 @@ iterations = \
 # Probability of mutation of an allele
 # (value range: <0, 1>)
 mutation_probability = \
-    0.02
+    0.1
 
 # Cities coordinates
 # (as a tuple of tuples)
