@@ -13,7 +13,12 @@ population_size = \
 iterations = \
     100
 
-# Probability of mutation of an allele
+# Probability of crossover of a chromosome
+# (value range: <0, 1>)
+crossover_probability = \
+    0.5
+
+# Probability of mutation of a chromosome
 # (value range: <0, 1>)
 mutation_probability = \
     0.1

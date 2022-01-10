@@ -78,7 +78,7 @@ class GeneticAlgorithm:
     def single_pmx_crossover(self, parent1: Chromosome, parent2: Chromosome) -> Tuple[Chromosome, Chromosome]:
         chrlen = Chromosome.get_length()
         leftx = randrange(0, chrlen)
-        rightx = randrange(leftcross + 1, chrlen + 1)
+        rightx = randrange(leftx + 1, chrlen + 1)
         child1 = Chromosome(deepcopy(parent1.genes))
         child2 = Chromosome(deepcopy(parent2.genes))
         chars1 = {}
@@ -97,11 +97,11 @@ class GeneticAlgorithm:
                 child2[i] = chars2[child2[i]]
         return (child1, child2)
 
-    def save_statistics(self):
-        maxr = -float("inf")
+    def save_statistics(self) -> Tuple[float, float]:
         minr = -float("inf")
-        maxfit = -float("inf")
+        maxr = -float("inf")
         minfit = float("inf")
+        maxfit = -float("inf")
         sum = 0.0
         for ind in self.population:
             sum = sum + ind.fitness
@@ -110,26 +110,30 @@ class GeneticAlgorithm:
                 minr = ind.chromosome.genes
             if ind.fitness > maxfit:
                 maxfit = ind.fitness
-                max_x = ind.chromosome.genes
+                maxr = ind.chromosome.genes
         avgfit = sum / self.population_size
-        self.max_fitness.append(maxfit)
         self.min_fitness.append(minfit)
+        self.max_fitness.append(maxfit)
         self.avg_fitness.append(avgfit)
-        return [maxr, minr]
+        return (minr, maxr)
     
     def find_route(self):
         [shortest, longest] = self.save_statistics()
-        best_fitness = self.max_fitness[0]
-        worst_fitness = self.min_fitness[0]
+        best_fit = self.min_fitness[0]
+        worst_fit = self.max_fitness[0]
         while self.generations < self.iterations:
             self.select()
-            self.crossover() # ENDED HERE
+            self.crossover()
             self.generations = self.generations + 1
             if self.generations % 10 == 0:
                 print('Generation #{}...'.format(self.generations))
-            gen_best_x = self.save_statistics()
-            gen_best_fitness = self.max_fitness[self.generations]
-            if gen_best_fitness > best_fitness:
-                best_x = gen_best_x
-                best_fitness = gen_best_fitness
-        return [best_x, best_fitness, self.max_fitness, self.min_fitness, self.avg_fitness]
+            [gen_shortest, gen_longest] = self.save_statistics()
+            gen_best_fit = self.min_fitness[self.generations]
+            gen_worst_fit = self.max_fitness[self.generations]
+            if gen_best_fit < best_fit:
+                shortest = gen_shortest
+                best_fit = gen_best_fit
+            if gen_worst_fit > worst_fit:
+                longest = gen_longest
+                worst_fit = gen_worst_fit
+        return [shortest, best_fit, longest, worst_fit, self.min_fitness, self.max_fitness, self.avg_fitness]

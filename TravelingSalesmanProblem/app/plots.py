@@ -34,3 +34,6 @@ def display_fitness_plots(generations: int, max_fitness: List[float], min_fitnes
     display_single_fitness_plot('Maximal', 1, gennums, max_fitness)
     display_single_fitness_plot('Minimal', 2, gennums, min_fitness)
     display_single_fitness_plot('Average', 3, gennums, avg_fitness)
+    
+#def diplay_map():
+
