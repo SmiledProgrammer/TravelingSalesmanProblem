@@ -11,7 +11,7 @@ population_size = \
 # Number of iterations
 # (as an integer)
 iterations = \
-    200
+    100
 
 # Probability of crossover of a chromosome
 # (value range: <0, 1>)
