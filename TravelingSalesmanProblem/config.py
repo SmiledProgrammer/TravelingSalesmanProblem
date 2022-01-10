@@ -11,7 +11,7 @@ population_size = \
 # Number of iterations
 # (as an integer)
 iterations = \
-    100
+    200
 
 # Probability of crossover of a chromosome
 # (value range: <0, 1>)
@@ -21,7 +21,7 @@ crossover_probability = \
 # Probability of mutation of a chromosome
 # (value range: <0, 1>)
 mutation_probability = \
-    0.1
+    0.25
 
 # Cities coordinates
 # (as a tuple of tuples)

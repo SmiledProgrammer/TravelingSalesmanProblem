@@ -37,7 +37,6 @@ class Population:
     @classmethod
     def random(cls, popsize: int) -> 'Population':
         chrlen = Chromosome.get_length()
-        print(chrlen)
         routes = []
         for _ in range(popsize):
             cities = list(range(chrlen))

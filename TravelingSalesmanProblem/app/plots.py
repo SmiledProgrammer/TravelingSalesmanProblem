@@ -1,32 +1,16 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from typing import List
-from typing import Callable
+from typing import Callable, List, Tuple
 
-# TODO: remove
-def display_function_plot(func: Callable, figname: str, foundpointx: float, foundpointy: float, startval: float, endval: float, dividepoints: int = 100):
-    funcx = np.linspace(startval, endval, dividepoints)
-    funcy = func(funcx)
-    funcfig = plt.figure(num=figname)
-    ax = funcfig.add_subplot(1, 1, 1)
-    ax.spines['left'].set_position('zero')
-    ax.spines['bottom'].set_position('zero')
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    ax.xaxis.set_tick_params(bottom='on', top='off', direction='inout')
-    ax.yaxis.set_tick_params(left='on', right='off', direction='inout')
-    ax.plot(funcx, funcy)
-    ax.plot(foundpointx, foundpointy, 'bo')
-    ax.annotate('({:.4f}, {:.4f})'.format(foundpointx, foundpointy), (foundpointx, foundpointy))
-    ax.set_ylim(bottom=0)
+from .cities import get_cities_symbols
 
-def display_single_fitness_plot(plottype: str, plotnum: int, x: List[float], y: List[float]):
-    name = plottype + ' fitness'
-    plt.subplot(1, 3, plotnum)
+def display_single_fitness_plot(plot_type: str, plot_num: int, x: List[float], y: List[float]):
+    name = plot_type + ' fitness'
+    plt.subplot(1, 3, plot_num)
     plt.plot(x, y)
     plt.xlabel('Generation')
     plt.ylabel(name)
-    plt.title(plottype + ' fitness in each generation', y=1.05)
+    plt.title(plot_type + ' fitness in each generation', y=1.05)
 
 def display_fitness_plots(generations: int, max_fitness: List[float], min_fitness: List[float], avg_fitness: List[float]):
     plt.figure(figsize=(15, 4.5), num='Fitness plots')
@@ -35,5 +19,22 @@ def display_fitness_plots(generations: int, max_fitness: List[float], min_fitnes
     display_single_fitness_plot('Minimal', 2, gennums, min_fitness)
     display_single_fitness_plot('Average', 3, gennums, avg_fitness)
     
-#def diplay_map():
-
+def display_map(plot_type: str, route_color: str, cities_coordinates: Tuple[Tuple[float]], route: List[int], route_length: float):
+    figname = plot_type + ' route'
+    plotname = figname + ' (length: ' + '{:.5f}'.format(route_length) + ')'
+    plt.figure(figsize=(5, 5), num=figname)
+    plt.title(plotname)
+    plt.grid()
+    plt.xticks(range(1, 11))
+    plt.yticks(range(1, 11))
+    for i in range(len(route)):
+        city1 = cities_coordinates[route[i - 1]]
+        city2 = cities_coordinates[route[i]]
+        plt.plot([city1[0], city2[0]], [city1[1], city2[1]], color=route_color)
+    for index, coords in enumerate(cities_coordinates):
+        cx = coords[0]
+        cy = coords[1]
+        csymbol = get_cities_symbols()[index]
+        plt.plot(cx, cy, 'ko')
+        plt.annotate('  {}({}, {})'.format(csymbol, cx, cy), (cx, cy))
+    

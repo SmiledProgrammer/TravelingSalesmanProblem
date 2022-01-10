@@ -8,9 +8,10 @@ CITIES_SYMBOLS = string.ascii_uppercase
 CITIES_DISTANCES = []
 
 def set_cities_amount(value: int):
+    global CITIES_AMOUNT
+    global CITIES_SYMBOLS
     if value > len(CITIES_SYMBOLS):
         raise ValueError('Cities amount (chromosome length) is too big (max: {}).'.format(len(CITIES_SYMBOLS)))
-    global CITIES_AMOUNT
     CITIES_AMOUNT = value
     
 def get_cities_amount() -> int:
@@ -24,6 +25,10 @@ def set_cities_distances(distances: List[List[float]]):
 def get_cities_distances() -> List[List[float]]:
     global CITIES_DISTANCES
     return CITIES_DISTANCES
+
+def get_cities_symbols() -> str:
+    global CITIES_SYMBOLS
+    return CITIES_SYMBOLS
 
 def coordinates_to_distances(coordinates: Tuple[Tuple[float]]) -> List[List[float]]:
     count = len(coordinates)
