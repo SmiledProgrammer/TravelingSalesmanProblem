@@ -22,7 +22,8 @@ def display_fitness_plots(generations: int, max_fitness: List[float], min_fitnes
 def display_map(plot_type: str, route_color: str, cities_coordinates: Tuple[Tuple[float]], route: List[int], route_length: float):
     figname = plot_type + ' route'
     plotname = figname + ' (length: ' + '{:.5f}'.format(route_length) + ')'
-    plt.figure(figsize=(5, 5), num=figname)
+    fig = plt.figure(figsize=(5, 5), num=figname)
+    ax = fig.add_subplot(1, 1, 1)
     plt.title(plotname)
     plt.grid()
     plt.xticks(range(1, 11))
@@ -30,11 +31,13 @@ def display_map(plot_type: str, route_color: str, cities_coordinates: Tuple[Tupl
     for i in range(len(route)):
         city1 = cities_coordinates[route[i - 1]]
         city2 = cities_coordinates[route[i]]
-        plt.plot([city1[0], city2[0]], [city1[1], city2[1]], color=route_color)
+        ax.plot([city1[0], city2[0]], [city1[1], city2[1]], color=route_color)
     for index, coords in enumerate(cities_coordinates):
         cx = coords[0]
         cy = coords[1]
         csymbol = get_cities_symbols()[index]
-        plt.plot(cx, cy, 'ko')
-        plt.annotate('  {}({}, {})'.format(csymbol, cx, cy), (cx, cy))
+        ax.plot(cx, cy, 'ko')
+        ax.annotate('  {}({}, {})'.format(csymbol, cx, cy), (cx, cy))
+    ax.set_xlim(left=0, right=10)
+    ax.set_ylim(bottom=0, top=10)
     
